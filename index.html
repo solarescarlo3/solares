@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator Website</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f4f4f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #333;
+      color: #fff;
+      padding: 1rem;
+    }
+
+    nav a {
+      color: #fff;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    .calculator {
+      margin: 2rem auto;
+      width: 250px;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #aaa;
+    }
+
+    #display {
+      width: 100%;
+      height: 40px;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      text-align: right;
+      padding: 5px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 15px;
+      font-size: 1rem;
+      border: none;
+      background: #eee;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: #ddd;
+    }
+
+    .operator {
+      background: #f9c74f;
+    }
+
+    #equals {
+      background: #90be6d;
+    }
+
+    #clear {
+      background: #f94144;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Simple Calculator</h1>
+    <nav>
+      <a href="#calculator">Calculator</a>
+      <a href="#instructions">Instructions</a>
+    </nav>
+  </header>
+
+  <!-- Calculator Interface -->
+  <section id="calculator">
+    <div class="calculator">
+      <input type="text" id="display" disabled>
+      <div class="buttons">
+        <button class="btn" data-value="7">7</button>
+        <button class="btn" data-value="8">8</button>
+        <button class="btn" data-value="9">9</button>
+        <button class="btn operator" data-value="/">÷</button>
+
+        <button class="btn" data-value="4">4</button>
+        <button class="btn" data-value="5">5</button>
+        <button class="btn" data-value="6">6</button>
+        <button class="btn operator" data-value="*">×</button>
+
+        <button class="btn" data-value="1">1</button>
+        <button class="btn" data-value="2">2</button>
+        <button class="btn" data-value="3">3</button>
+        <button class="btn operator" data-value="-">−</button>
+
+        <button class="btn" data-value="0">0</button>
+        <button class="btn" id="clear">C</button>
+        <button class="btn" id="equals">=</button>
+        <button class="btn operator" data-value="+">+</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Instructions/User Guide -->
+  <section id="instructions">
+    <h2>User Guide</h2>
+    <p>Welcome to the Simple Calculator! Here’s how to use it:</p>
+    <ul>
+      <li>Click number buttons (0–9) to enter values.</li>
+      <li>Use operator buttons (+, −, ×, ÷) for calculations.</li>
+      <li>Press <strong>=</strong> to see the result.</li>
+      <li>Press <strong>C</strong> to clear/reset the display.</li>
+      <li>Keyboard support: You can also type numbers and operators directly.</li>
+      <li>Error handling: Division by zero will show an error message.</li>
+    </ul>
+  </section>
+
+  <script>
+    const display = document.getElementById("display");
+    const buttons = document.querySelectorAll(".btn");
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        const value = button.dataset.value;
+
+        if (button.id === "clear") {
+          display.value = "";
+        } else if (button.id === "equals") {
+          try {
+            if (display.value.includes("/0")) {
+              display.value = "Error: Divide by 0";
+            } else {
+              display.value = eval(display.value);
+            }
+          } catch {
+            display.value = "Error";
+          }
+        } else {
+          display.value += value || "";
+        }
+      });
+    });
+
+    // Keyboard support
+    document.addEventListener("keydown", (event) => {
+      if (!isNaN(event.key) || ["+", "-", "*", "/"].includes(event.key)) {
+        display.value += event.key;
+      } else if (event.key === "Enter") {
+        try {
+          if (display.value.includes("/0")) {
+            display.value = "Error: Divide by 0";
+          } else {
+            display.value = eval(display.value);
+          }
+        } catch {
+          display.value = "Error";
+        }
+      } else if (event.key === "Escape") {
+        display.value = "";
+      }
+    });
+  </script>
+</body>
+</html>
